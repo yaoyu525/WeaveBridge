@@ -1,0 +1,1526 @@
+
+Navigation.tsx
+import Link from 'next/link';
+import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import {
+Compass,
+Palette,
+TrendingUp, User,
+Menu,
+X,
+LogOut, Sparkles, Zap
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+export default function Navigation() {
+const [isOpen, setIsOpen] = useState(false);
+const [isLoggedIn, setIsLoggedIn] = useState(false); const router = useRouter();
+const pathname = usePathname();
+const navItems = [
+{ href: '/', label: '首页', icon: Compass },
+{ href: '/full-plan', label: '全案生成', icon: Zap },
+{ href: '/design', label: 'AIGC 设计', icon: Palette },
+{ href: '/strategy', label: '智能策略', icon: TrendingUp }, { href: '/services', label: '增值服务', icon: Sparkles },
+
+
+{ href: '/profile', label: '个人中心', icon: User }, ];
+const handleLogout = () => {
+setIsLoggedIn(false);
+router.push('/'); };
+const isActive = (href: string) => { if (href === '/') {
+return pathname === '/'; }
+return pathname.startsWith(href); };
+return (
+<nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-brand/20">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div className="flex items-center justify-between h-16">
+{/* Logo */}
+<Link href="/" className="flex items-center space-x-3"> <div className="relative w-10 h-10">
+<Image
+src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-
+1&file_path=assets%2Flogo.png&nonce=bda7c4a0-835d-4535-9ea5-
+4563d8795d94&project_id=7621397486154022950&sign=bacaed2403ced5b65403b7b05ec3a3af b72979932cc945d5cbcdb603d9f8b6ff"
+alt="出海罗盘"
+fill
+className="object-contain"
+unoptimized />
+</div>
+
+
+<div className="flex flex-col">
+<span className="text-xl font-bold text-slate-800">出海罗盘</span>
+<span className="text-xs text-slate-500 hidden sm:block">Compass for Export</span>
+</div>
+</Link>
+{/* Desktop Navigation */}
+<div className="hidden lg:flex items-center space-x-1">
+{navItems.map((item) => {
+const Icon = item.icon;
+const active = isActive(item.href);
+return (
+<Link
+key={item.href}
+href={item.href}
+className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition- all duration-200 ${
+active
+? 'bg-brand text-white'
+: 'text-slate-600 hover:bg-brand/10 hover:text-brand-dark' }`}
+>
+<Icon className="h-4 w-4" />
+<span>{item.label}</span> </Link>
+);
+})}
+</div>
+{/* Auth Buttons */}
+<div className="hidden lg:flex items-center space-x-3">
+
+
+{isLoggedIn ? (
+<Button
+onClick={handleLogout}
+variant="ghost"
+className="text-slate-600 hover:bg-brand/10 hover:text-brand-dark" >
+<LogOut className="h-4 w-4 mr-2" />
+登出
+</Button>
+) : (
+<>
+<Link href="/auth/login">
+<Button
+variant="ghost"
+className="text-slate-600 hover:bg-brand/10 hover:text-brand-dark" >
+登录
+</Button>
+</Link>
+<Link href="/auth/register">
+<Button className="bg-brand hover:bg-brand-dark text-white">注册
+</Button>
+</Link>
+</>
+)}
+</div>
+{/* Mobile menu button */}
+<div className="lg:hidden">
+
+
+<button
+onClick={() => setIsOpen(!isOpen)}
+className="text-slate-600 hover:text-brand-dark p-2" >
+{isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />} </button>
+</div>
+</div>
+</div>
+{/* Mobile Navigation */}
+{isOpen && (
+<div className="lg:hidden bg-white border-t border-brand/20 shadow-lg"> <div className="px-2 pt-2 pb-3 space-y-1">
+{navItems.map((item) => {
+const Icon = item.icon;
+const active = isActive(item.href);
+return (
+<Link
+key={item.href}
+href={item.href}
+className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition- all ${
+active
+? 'bg-brand text-white'
+: 'text-slate-600 hover:bg-brand/10 hover:text-brand-dark' }`}
+onClick={() => setIsOpen(false)} >
+<Icon className="h-5 w-5" />
+<span>{item.label}</span>
+
+
+</Link>
+);
+})}
+<div className="pt-4 pb-2 border-t border-brand/20 mt-2"> {isLoggedIn ? (
+<button
+onClick={handleLogout}
+className="flex items-center space-x-2 w-full px-3 py-2 rounded-lg text- slate-600 hover:bg-brand/10 hover:text-brand-dark"
+>
+<LogOut className="h-5 w-5" />
+<span>登出</span> </button>
+) : (
+<>
+<Link
+href="/auth/login"
+className="block px-3 py-2 rounded-lg text-slate-600 hover:bg- brand/10 hover:text-brand-dark"
+onClick={() => setIsOpen(false)} >
+登录
+</Link>
+<Link
+href="/auth/register"
+className="block px-3 py-2 rounded-lg bg-brand text-white text-center mt-2"
+onClick={() => setIsOpen(false)} >
+注册
+</Link>
+
+
+</>
+)}
+</div>
+</div>
+</div>
+)}
+</nav>
+);
+}
+Footer.tsx
+export default function Footer() { return (
+<footer className="bg-brand/10 border-t border-brand/20 py-10">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+{/*  公司信息 */}
+<div>
+<div className="flex items-center gap-2 mb-3"> <img
+src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=- 1&file_path=assets%2Flogo.png&nonce=bda7c4a0-835d-4535-9ea5-
+4563d8795d94&project_id=7621397486154022950&sign=bacaed2403ced5b65403b7b05ec3a3af b72979932cc945d5cbcdb603d9f8b6ff"
+alt="出海罗盘"
+className="w-8 h-8 object-contain" />
+<h3 className="text-lg font-semibold text-slate-800">出海罗盘</h3> </div>
+<p className="text-sm text-slate-600 leading-relaxed">
+执科技罗盘，扬文化风帆，让中国传统手艺在世界舞台绽放新生。
+</p>
+
+
+</div>
+
+
+{/*  联系方式 */}
+<div>
+<h3 className="text-lg font-semibold text-slate-800 mb-3">联系我们</h3> <div className="text-sm text-slate-600 space-y-2">
+<p>西安出海罗盘科技有限公司</p>
+<p>邮箱: 2036860494@163.com</p>
+<p>电话: 13309220780</p> </div>
+</div>
+{/*  服务时间 */}
+<div>
+<h3 className="text-lg font-semibold text-slate-800 mb-3">服务时间</h3> <div className="text-sm text-slate-600 space-y-2">
+<p>周一至周五: 9:00 - 18:00</p>
+<p>周末: 10:00 - 17:00</p> </div>
+</div>
+</div>
+<div className="mt-8 pt-6 border-t border-brand/20 text-center text-sm text-slate- 500">
+<p>© {new Date().getFullYear()}  西安出海罗盘科技有限公司 版权所有</p> </div>
+</div>
+</footer> );
+}
+网站首页-Page.tsx
+import Link from 'next/link';
+
+
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge'; import {
+Compass,
+Palette,
+TrendingUp,
+Shield,
+Globe,
+Sparkles,
+Ship,
+ArrowRight,
+CheckCircle2,
+Users,
+Award,
+Target,
+Zap,
+LineChart,
+BookOpen,
+Image as ImageIcon, AlertTriangle,
+FileText, MapPin, Clock,
+Star, Play
+} from 'lucide-react';
+export default function Home() {
+
+
+const features = [ {
+icon: ImageIcon,
+title: 'AI 图片生成',
+description: '输入产品描述，AI 自动生成高质量产品设计图，支持多种风格', details: ['景泰蓝花瓶设计', '蜀绣图案设计', '陶瓷造型设计'],
+href: '/design', },
+{
+icon: BookOpen,
+title: '设计理念生成',
+description: '结合传统工艺与现代审美，智能生成产品设计与文化内涵', details: ['文化传承分析', '现代创新方案', '目标受众定位'],
+href: '/design', },
+{
+icon: AlertTriangle,
+title: '文化禁忌检测',
+description: '分析目标市场文化禁忌，避免文化冲突，降低出海风险', details: ['宗教禁忌识别', '色彩文化解读', '符号寓意分析'],
+href: '/design', },
+{
+icon: LineChart,
+title: '定价策略分析',
+description: '基于市场调研和成本分析，提供科学的定价建议',
+details: ['竞品价格分析', '利润空间计算', '促销策略建议'],
+href: '/strategy', },
+
+
+{
+icon: FileText,
+title: ' 出口政策解读',
+description: '解读目标国家进口政策、关税政策，提供合规指导', details: ['关税税率查询', '认证要求说明', '贸易协定优惠'],
+href: '/strategy',
+},
+{
+icon: MapPin,
+title: '市场趋势预测',
+description: '分析全球手工艺品市场趋势，把握出海最佳时机', details: ['需求趋势预测', '竞争格局分析', '渠道策略推荐'],
+href: '/strategy',
+},
+{
+icon: Shield,
+title: '风险预警应对',
+description: '识别汇率、物流、政策等风险，制定应急预案', details: ['汇率风险对冲', '物流成本优化', '政策变动预警'],
+href: '/strategy',
+},
+{
+icon: Globe,
+title: '多市场适配',
+description: '一次设计，适配多个目标市场，最大化商业价值', details: ['欧美市场策略', '东南亚市场策略', '中东市场策略'],
+href: '/strategy',
+},
+];
+
+
+const craftTypes = [
+{ name: '景泰蓝', region: '北京', desc: '皇家工艺，百年传承' },
+{ name: '蜀绣', region: '四川', desc: '针法细腻，色彩雅致' },
+{ name: '景德镇瓷器', region: '江西', desc: ' 白如玉，薄如纸' },
+{ name: '苏绣', region: '江苏', desc: '精细雅洁，针法多变' },
+{ name: '宜兴紫砂', region: '江苏', desc: '泡茶不走味，贮茶不馊' }, { name: '东阳木雕', region: '浙江', desc: '雕工精细，层次丰富' },
+{ name: '剪纸艺术', region: '陕西', desc: '镂空艺术，民间瑰宝' },
+{ name: '漆器', region: '福建', desc: '光泽如镜，历久弥新' }, ];
+const targetMarkets = [
+{ name: '美国', flag: 'US', features: '高端礼品市场，注重品质与故事' },
+{ name: '欧洲', flag: 'EU', features: '艺术收藏市场，重视文化内涵' },
+{ name: ' 日本', flag: 'JP', features: '禅意美学市场，追求简约精致' },
+{ name: '东南亚', flag: 'TH', features: '华人市场，文化认同感强' },
+{ name: ' 中东', flag: 'SA', features: '奢华礼品市场，偏好金色系' },
+{ name: '澳洲', flag: 'AU', features: '新兴市场，竞争相对较小' }, ];
+const serviceProcess = [
+{ step: '01', title: '产品信息录入', desc: '输入您的手工艺品基本信息、工艺类型、目标市场', icon: Target },
+{ step: '02', title: 'AI 智能分析', desc: 'AI 分析产品特点、市场定位、文化适配性', icon: Sparkles },
+{ step: '03', title: '方案生成', desc: '生成设计方案、定价策略、出海路线图', icon: Zap },
+{ step: '04', title: '执行指导', desc: '提供详细的执行步骤和风险应对建议', icon:
+CheckCircle2 }, ];
+const stats = [
+{ number: '1000+', label: '服务商户' }, { number: '50+', label: '覆盖国家' },
+
+
+{ number: '5000+', label: '设计方案' },
+{ number: '98%', label: '客户满意度' }, ];
+const testimonials = [
+{
+name: '王女士',
+company: '景德镇某陶瓷工作室',
+content: ' 出海罗盘帮我们的瓷器产品找到了适合日本市场的定位，现在订单量增长了 3 倍！',
+avatar: ' ', },
+{
+name: '李先生',
+company: '成都蜀绣传承人',
+content: 'AI 生成的设计理念让我们找到了传统工艺与现代审美的结合点，非常专业！',
+avatar: ' ', },
+{
+name: '张总',
+company: '东阳木雕出口企业',
+content: '文化禁忌检测功能帮我们避免了一次重大失误，这个平台太实用了！', avatar: ' ',
+},
+];
+return (
+<div className="flex flex-col"> {/* Hero Section */}
+<section className="relative bg-brand text-white py-20 lg:py-32 overflow-hidden">
+<div className="absolute inset-0 bg-
+[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g
+
+
+9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBma WxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbG wtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIyIi8+PC9nPjwvZz48L3 N2Zz4=')] opacity-30"></div>
+<div className="absolute top-20 left-10 w-32 h-32 bg-white/20 rounded-full blur- 3xl"></div>
+<div className="absolute bottom-20 right-10 w-40 h-40 bg-sky-300/30 rounded-full blur-3xl"></div>
+<div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="text-center">
+<div className="flex justify-center mb-6">
+<div className="bg-white p-4 rounded-2xl shadow-2xl shadow-brand/30 transform hover:scale-105 transition-transform">
+<Image
+src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-
+1&file_path=assets%2Flogo.png&nonce=bda7c4a0-835d-4535-9ea5-
+4563d8795d94&project_id=7621397486154022950&sign=bacaed2403ced5b65403b7b05ec3a3af b72979932cc945d5cbcdb603d9f8b6ff"
+alt="出海罗盘"
+width={64}
+height={64}
+className="object-contain"
+unoptimized
+/>
+</div>
+</div>
+<div className="mb-4">
+<Badge className="bg-white/30 text-white border-white/40 px-4 py-1 text-sm backdrop-blur-sm">
+◆  中国传统手工艺品出海智能平台</Badge>
+</div>
+
+
+<h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">执科技罗盘
+<br />
+<span className="text-white/90">扬文化风帆</span> </h1>
+<p className="text-xl md:text-2xl text-white/95 mb-4 max-w-3xl mx-auto leading-relaxed">
+让中国传统手艺在世界舞台绽放新生</p>
+
+<p className="text-base text-white/85 mb-8 max-w-2xl mx-auto">
+为传统手工艺商户（工作室、非遗传承人）提供产品辅助设计到出海策略的一站式智能支持
+</p>
+
+
+<div className="flex flex-col sm:flex-row gap-4 justify-center"> <Link href="/full-plan">
+<Button size="lg" className="bg-white text-brand hover:bg-slate-50 px-8 py-6 text-lg shadow-xl border-0">
+<Zap className="mr-2 h-5 w-5" />
+立即生成全案
+<ArrowRight className="ml-2 h-5 w-5" /> </Button>
+</Link>
+<Link href="/design">
+<Button size="lg" className="bg-white/20 backdrop-blur-sm border-2
+border-white/50 text-white hover:bg-white/30 hover:border-white/70 px-8 py-6 text-lg shadow- lg">
+<Play className="mr-2 h-5 w-5" />
+体验 Demo
+</Button>
+
+
+</Link>
+</div>
+</div>
+</div>
+{/*  装饰性波浪 */}
+<div className="absolute bottom-0 left-0 right-0">
+<svg className="w-full h-16 text-slate-50" viewBox="0 0 1440 64" fill="currentColor" preserveAspectRatio="none">
+<path d="M0,0 C480,64 960,64 1440,0 L1440,64 L0,64 Z"></path> </svg>
+</div>
+</section>
+{/* Stats Section */}
+<section className="py-12 bg-slate-50 border-b">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="grid grid-cols-2 md:grid-cols-4 gap-8"> {stats.map((stat, index) => (
+<div key={index} className="text-center">
+<div className="text-3xl md:text-4xl font-bold text-brand-dark"> {stat.number}
+</div>
+<div className="text-slate-600 mt-1">{stat.label}</div> </div>
+))}
+</div>
+</div>
+</section>
+{/* Craft Types Section */}
+<section className="py-16 bg-white">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+
+<div className="text-center mb-12">
+<h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">支持的传统工艺品类
+</h2>
+<p className="text-lg text-slate-600 max-w-2xl mx-auto">
+涵盖中国主要传统手工艺品类，为您的特色产品提供专业支持</p>
+</div>
+<div className="grid grid-cols-2 md:grid-cols-4 gap-4"> {craftTypes.map((craft, index) => (
+<div
+key={index}
+className="group p-4 bg-brand/5 rounded-xl border border-brand/10 hover:border-brand/30 hover:shadow-lg transition-all duration-300"
+>
+<div className="flex items-center justify-between mb-2">
+<h3 className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors">
+{craft.name} </h3>
+<Badge variant="outline" className="text-xs text-slate-500"> {craft.region}
+</Badge> </div>
+<p className="text-sm text-slate-600">{craft.desc}</p> </div>
+))}
+</div>
+</div>
+</section>
+
+
+{/* Target Markets Section */}
+<section className="py-16 bg-brand/10">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div className="text-center mb-12">
+<h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">目标市场覆盖
+</h2>
+<p className="text-lg text-slate-600 max-w-2xl mx-auto">
+深入了解全球主流市场特点，精准匹配您的产品定位</p>
+</div>
+<div className="grid grid-cols-2 md:grid-cols-3 gap-6"> {targetMarkets.map((market, index) => (
+<div
+key={index}
+className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition- all duration-300 border border-slate-100"
+>
+<div className="text-4xl mb-3">{market.flag}</div>
+<h3 className="text-xl font-semibold text-slate-800 mb-
+2">{market.name}</h3>
+<p className="text-sm text-slate-600">{market.features}</p> </div>
+))}
+</div>
+</div>
+</section>
+{/* Service Process Section */}
+<section className="py-16 bg-white">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+
+<div className="text-center mb-12">
+<h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+服务流程</h2>
+<p className="text-lg text-slate-600 max-w-2xl mx-auto">简单四步，开启您的传统手工艺出海之旅
+</p>
+</div>
+<div className="grid md:grid-cols-4 gap-6">
+{serviceProcess.map((item, index) => { const Icon = item.icon;
+return (
+<div key={index} className="relative"> {index < serviceProcess.length - 1 && (
+<div className="hidden md:block absolute top-12 left-full w-full h-0.5 bg-brand/20 z-0"></div>
+)}
+<div className="relative bg-brand/10 p-6 rounded-xl border-2 border- brand/20 hover:border-brand/40 transition-all">
+<div className="flex items-center gap-3 mb-4">
+<div className="bg-brand text-white w-10 h-10 rounded-lg flex items-center justify-center font-bold">
+{item.step} </div>
+<Icon className="h-6 w-6 text-brand-dark" /> </div>
+<h3 className="font-semibold text-slate-800 mb-2">{item.title}</h3> <p className="text-sm text-slate-600">{item.desc}</p>
+</div>
+</div>
+);
+
+
+})}
+</div>
+</div>
+</section>
+{/* Features Section */}
+<section className="py-16 bg-slate-50">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div className="text-center mb-12">
+<h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">核心功能
+</h2>
+<p className="text-lg text-slate-600">
+从产品辅助设计到出海策略制定的全方位支持
+</p>
+</div>
+<div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+{features.map((feature, index) => { const Icon = feature.icon;
+return (
+<Link key={index} href={feature.href}>
+<Card className="h-full hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer border-blue-100 group">
+<CardHeader>
+<div className="bg-brand w-12 h-12 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+<Icon className="h-6 w-6 text-white" />
+</div>
+<CardTitle className="text-lg">{feature.title}</CardTitle> </CardHeader>
+<CardContent>
+
+
+<CardDescription className="text-sm leading-relaxed mb-3">
+{feature.description}
+</CardDescription>
+<ul className="space-y-1">
+{feature.details.map((detail, idx) => (
+<li key={idx} className="text-xs text-slate-500 flex items- center gap-1">
+<CheckCircle2 className="h-3 w-3 text-brand" />
+{detail}
+</li>
+))}
+</ul>
+</CardContent>
+</Card>
+</Link>
+);
+})}
+</div>
+</div>
+</section>
+{/* Testimonials Section */}
+<section className="py-16 bg-white">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div className="text-center mb-12">
+<h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">用户评价
+</h2>
+<p className="text-lg text-slate-600 max-w-2xl mx-auto">
+听听已经使用出海罗盘的手工艺人怎么说</p>
+
+
+</div>
+<div className="grid md:grid-cols-3 gap-8"> {testimonials.map((item, index) => (
+<Card key={index} className="border-2 border-blue-50 hover:border-blue-200 transition-all duration-300">
+<CardContent className="pt-6">
+<div className="flex items-center gap-1 mb-4"> {[ 1,2,3,4,5].map((star) => (
+<Star key={star} className="h-4 w-4 fill-yellow-400 text-yellow- 400" />
+))}
+</div>
+<p className="text-slate-700 mb-4 leading- relaxed">"{item.content}"</p>
+<div className="flex items-center gap-3">
+<div className="text-3xl">{item.avatar}</div> <div>
+<p className="font-semibold text-slate-800">{item.name}</p>
+<p className="text-sm text-slate-500">{item.company}</p>
+</div>
+</div>
+</CardContent>
+</Card>
+))}
+</div>
+</div>
+</section>
+{/* Advantages Section */}
+<section className="py-16 bg-brand/10">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div className="grid lg:grid-cols-2 gap-12 items-center">
+
+
+<div>
+<Badge className="bg-sky-500/20 text-sky-700 border-sky-300/50 mb-4">
+平台优势</Badge>
+<h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">为什么选择出海罗盘？
+</h2>
+<div className="space-y-4"> {[
+{ icon: Sparkles, title: 'AI 驱动', desc: '智能生成设计方案和出海策略，效率提升 10 倍' },
+{ icon: Target, title: '精准定位', desc: '专注传统手工艺品领域，理解您的特殊需求' },
+{ icon: Globe, title: '全球视野', desc: '覆盖 50+国家市场洞察，把握最佳出海时机' },
+{ icon: Shield, title: '风险可控', desc: '提前识别文化冲突和合规风险，避免重大损失' },
+{ icon: Clock, title: '一站式服务', desc: '从设计到出海全覆盖，节省您的宝贵时间' },
+{ icon: Users, title: '专业团队', desc: '深耕传统文化与跨境电商，懂手艺更懂市场' },
+].map((item, index) => { const Icon = item.icon; return (
+<div key={index} className="flex items-start gap-4 bg-white p-4 rounded-lg shadow-sm border border-brand/20">
+<div className="bg-brand p-2 rounded-lg">
+<Icon className="h-5 w-5 text-white" /> </div>
+<div>
+<h3 className="font-semibold text-slate-800">{item.title}</h3> <p className="text-slate-600 text-sm">{item.desc}</p>
+
+
+</div>
+</div>
+);
+})}
+</div>
+</div>
+<div className="relative">
+<div className="bg-white rounded-2xl p-8 border-2 border-sky-200 shadow- lg">
+<div className="flex items-center gap-3 mb-6">
+<div className="bg-brand p-3 rounded-xl">
+<Award className="h-8 w-8 text-white" /> </div>
+<div>
+<h3 className="text-2xl font-bold text-slate-800">市场定位</h3> <p className="text-brand-dark text-sm">精准服务目标用户</p>
+</div>
+</div>
+
+
+<div className="space-y-4">
+<div className="bg-brand/10 rounded-lg p-4">
+<p className="text-brand-dark font-semibold mb-1">目标用户</p>
+<p className="text-slate-600 text-sm">
+有出海需求的中国传统手工艺商户、工作室、非遗传承人
+</p>
+</div>
+<div className="bg-brand/10 rounded-lg p-4">
+<p className="text-brand-dark font-semibold mb-1">核心价值</p>
+<p className="text-slate-600 text-sm">
+产品 AI 辅助设计 +  跨境方案生成的一站式智能支持
+
+
+</p>
+</div>
+<div className="bg-brand/10 rounded-lg p-4">
+<p className="text-brand-dark font-semibold mb-1">解决痛点</p>
+<p className="text-slate-600 text-sm">
+设计思路受限、文化适配困难、出海渠道不明、政策法规复杂
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+{/* CTA Section */}
+<section className="py-20 bg-brand/10">
+<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+<div className="bg-white rounded-3xl p-8 md:p-12 shadow-2xl border border- brand/20">
+<div className="bg-brand w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
+<Image
+src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=- 1&file_path=assets%2Flogo.png&nonce=bda7c4a0-835d-4535-9ea5-
+4563d8795d94&project_id=7621397486154022950&sign=bacaed2403ced5b65403b7b05ec3a3af b72979932cc945d5cbcdb603d9f8b6ff"
+alt="出海罗盘"
+width={40}
+height={40}
+className="object-contain"
+unoptimized
+
+
+/>
+</div>
+<h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">准备好让您的手艺走向世界了吗？
+</h2>
+<p className="text-lg text-slate-600 mb-8 max-w-xl mx-auto">立即注册出海罗盘，开启您的传统手工艺出海之旅。<br/>让我们用科技的力量，帮您把文化传承变成商业价值。
+</p>
+<div className="flex flex-col sm:flex-row gap-4 justify-center"> <Link href="/full-plan">
+<Button size="lg" className="bg-brand hover:bg-brand-dark text-white px- 10 py-6 text-lg shadow-xl">
+<Zap className="mr-2 h-5 w-5" />
+立即生成全案
+<ArrowRight className="ml-2 h-5 w-5" /> </Button>
+</Link>
+</div>
+<p className="text-sm text-slate-500 mt-4">
+无需信用卡 · 免费试用 7 天  · 随时取消
+</p>
+</div>
+</div>
+</section>
+{/* Company Info Section */}
+<section className="py-12 bg-brand text-white">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="text-center">
+<div className="flex items-center justify-center gap-3 mb-4">
+
+
+<div className="bg-white/20 backdrop-blur-sm p-2 rounded-lg">
+<Image
+src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-
+1&file_path=assets%2Flogo.png&nonce=bda7c4a0-835d-4535-9ea5-
+4563d8795d94&project_id=7621397486154022950&sign=bacaed2403ced5b65403b7b05ec3a3af b72979932cc945d5cbcdb603d9f8b6ff"
+alt="出海罗盘"
+width={28}
+height={28}
+className="object-contain"
+unoptimized />
+</div>
+<span className="text-2xl font-bold">出海罗盘</span> </div>
+<p className="text-white/90 max-w-2xl mx-auto">
+西安出海罗盘科技有限公司 · 执科技罗盘，扬文化风帆，让中国传统手艺在世界舞台绽放新生
+</p>
+</div>
+</div>
+</section> </div>
+);
+}
+AIGC 辅助设计页面-page.tsx
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+
+
+import { Textarea } from '@/components/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'; import { Badge } from '@/components/ui/badge';
+import {
+Palette,
+Image,
+BookOpen,
+AlertTriangle, Sparkles,
+Loader2,
+Download,
+Copy,
+CheckCircle2, Lightbulb,
+Target, Globe, Zap
+} from 'lucide-react';
+export default function DesignPage() {
+const [activeTab, setActiveTab] = useState('image');
+const [isLoading, setIsLoading] = useState(false);
+const [result, setResult] = useState<any>(null); //  图片生成
+const [imageForm, setImageForm] = useState({ productName: '',
+style: '',
+description: '', });
+//  设计理念
+
+
+const [conceptForm, setConceptForm] = useState({ productName: '',
+craftType: '',
+targetMarket: '', });
+//  文化禁忌
+const [cultureForm, setCultureForm] = useState({ productName: '',
+craftType: '',
+targetCountry: '',
+});
+const imageStyleOptions = [
+'传统古典', '现代简约', '东方禅意', '北欧极简', '奢华宫廷', '民族风情', '田园自然', '都市时尚'
+];
+const craftTypeOptions = [
+'景泰蓝', '蜀绣', '苏绣', '景德镇瓷器', '宜兴紫砂', '东阳木雕', '剪纸', '漆器', '玉雕', '竹编', '蜡染', '年画'
+];
+const targetMarketOptions = [
+'美国高端市场', '欧洲艺术收藏市场', '日本禅意美学市场',
+'东南亚华人市场', '中东奢华礼品市场', '澳洲新兴市场' ];
+const handleImageGenerate = async () => {
+if (!imageForm.productName || !imageForm.description) { alert('请填写产品名称和设计描述');
+return; }
+
+
+setIsLoading(true); try {
+const response = await fetch('/api/design/image', { method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(imageForm), });
+const data = await response.json();
+if (response.ok) { setResult(data);
+} else {
+alert(data.error || '生成失败');
+}
+} catch (error) {
+console.error('生成错误:', error);
+alert('生成失败，请稍后重试'); } finally {
+setIsLoading(false); }
+};
+const handleConceptGenerate = async () => {
+if (!conceptForm.productName || !conceptForm.craftType) { alert('请填写产品名称和工艺类型');
+return;
+}
+setIsLoading(true); try {
+const response = await fetch('/api/design/concept', { method: 'POST',
+
+
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(conceptForm), });
+const data = await response.json();
+if (response.ok) { setResult(data);
+} else {
+alert(data.error || '生成失败');
+}
+} catch (error) {
+console.error('生成错误:', error);
+alert('生成失败，请稍后重试'); } finally {
+setIsLoading(false); }
+};
+const handleCultureCheck = async () => {
+if (!cultureForm.productName || !cultureForm.targetCountry) { alert('请填写产品名称和目标国家');
+return;
+}
+setIsLoading(true); try {
+const response = await fetch('/api/design/culture', { method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(cultureForm), });
+const data = await response.json();
+
+
+if (response.ok) { setResult(data);
+} else {
+alert(data.error || '检测失败');
+}
+} catch (error) {
+console.error('检测错误:', error);
+alert('检测失败，请稍后重试'); } finally {
+setIsLoading(false); }
+};
+const copyToClipboard = (text: string) => { navigator.clipboard.writeText(text);
+alert('已复制到剪贴板'); };
+return (
+<div className="min-h-screen bg-brand/5 py-8">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+{/* Header */}
+<div className="text-center mb-8">
+<Badge className="bg-cyan-500/10 text-cyan-600 border-cyan-200 mb-4"> <Palette className="h-3 w-3 mr-1" />
+AIGC 智能设计
+</Badge>
+<h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3"> AI 辅助产品设计
+</h1>
+<p className="text-lg text-slate-600 max-w-2xl mx-auto">
+
+
+从图片生成到文化适配，为您的传统手工艺品注入新的生命力</p>
+</div>
+{/* Feature Highlights */}
+<div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+{[
+{ icon: Image, title: '智能图片生成', desc: '高质量设计图' }, { icon: BookOpen, title: '设计理念', desc: '传承与创新' },
+{ icon: AlertTriangle, title: '禁忌检测', desc: '规避文化冲突' }, { icon: Target, title: '市场定位', desc: '精准受众分析' },
+].map((item, index) => { const Icon = item.icon; return (
+<div key={index} className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+<Icon className="h-8 w-8 text-blue-600 mb-2" />
+<h3 className="font-semibold text-slate-800">{item.title}</h3>
+<p className="text-xs text-slate-500">{item.desc}</p> </div>
+);
+})}
+</div>
+<div className="grid lg:grid-cols-2 gap-8"> {/* Left: Input Form */}
+<Card className="shadow-xl border-slate-200">
+<CardHeader className="bg-brand/10 rounded-t-lg">
+<CardTitle className="flex items-center">
+<Zap className="h-5 w-5 mr-2 text-cyan-600" />设计工具
+</CardTitle>
+
+
+<CardDescription>
+选择功能类型，填写相关信息开始设计
+</CardDescription>
+</CardHeader>
+<CardContent className="pt-6">
+<Tabs value={activeTab} onValueChange={setActiveTab}>
+<TabsList className="grid w-full grid-cols-3 mb-6">
+<TabsTrigger value="image" className="flex items-center gap-1"> <Image className="h-4 w-4" />
+<span className="hidden sm:inline">图片生成</span>
+</TabsTrigger>
+<TabsTrigger value="concept" className="flex items-center gap-1"> <BookOpen className="h-4 w-4" />
+<span className="hidden sm:inline">设计理念</span>
+</TabsTrigger>
+<TabsTrigger value="culture" className="flex items-center gap-1"> <AlertTriangle className="h-4 w-4" />
+<span className="hidden sm:inline">文化禁忌</span>
+</TabsTrigger>
+</TabsList>
+{/*  图片生成 */}
+<TabsContent value="image" className="space-y-4">
+<div className="space-y-2">
+<Label htmlFor="productName">产品名称 *</Label> <Input
+id="productName"
+placeholder="例如：景泰蓝花瓶、蜀绣披肩"
+value={imageForm.productName}
+onChange={(e) => setImageForm({ ...imageForm, productName: e.target.value })}
+
+
+/>
+</div>
+<div className="space-y-2">
+<Label>设计风格（可参考选择）</Label> <div className="flex flex-wrap gap-2">
+{imageStyleOptions.map((style) => ( <Badge
+key={style}
+variant={imageForm.style === style ? "default" : "outline"} className="cursor-pointer hover:bg-blue-100"
+onClick={() => setImageForm({ ...imageForm, style })} >
+{style}
+</Badge> ))}
+</div>
+<Input
+placeholder="或输入自定义风格" value={imageForm.style}
+onChange={(e) => setImageForm({ ...imageForm, style: e.target.value })}
+className="mt-2" />
+</div>
+<div className="space-y-2">
+<Label htmlFor="description">设计描述 *</Label> <Textarea
+id="description"
+placeholder="详细描述您想要的设计效果，例如：一款适合欧美市场的现代简约风格景泰蓝花瓶，高度约 30cm，主色调为蓝白渐变，融入中国传统祥云纹
+
+
+样..."
+rows={5}
+value={imageForm.description}
+onChange={(e) => setImageForm({ ...imageForm, description: e.target.value })}
+/>
+</div>
+<Button
+onClick={handleImageGenerate}
+disabled={isLoading}
+className="w-full bg-brand hover:bg-brand-dark py-6" >
+{isLoading ? ( <>
+<Loader2 className="h-4 w-4 mr-2 animate-spin" />
+AI 正在生成设计图...
+</>
+) : (
+<>
+<Sparkles className="h-4 w-4 mr-2" />
+开始生成图片</>
+)}
+</Button>
+<div className="flex items-start gap-2 bg-blue-50 p-3 rounded-lg">
+<Lightbulb className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" /> <p className="text-xs text-blue-700">
+提示：描述越详细，生成效果越好。建议包含产品尺寸、颜色偏好、纹样元素、使用场景等信息。
+</p>
+
+
+</div>
+</TabsContent>
+{/*  设计理念 */}
+<TabsContent value="concept" className="space-y-4">
+<div className="space-y-2">
+<Label htmlFor="conceptProductName">产品名称 *</Label> <Input
+id="conceptProductName"
+placeholder="例如：蜀绣披肩、景泰蓝茶具"
+value={conceptForm.productName}
+onChange={(e) => setConceptForm({ ...conceptForm, productName: e.target.value })}
+/>
+</div>
+<div className="space-y-2">
+<Label>工艺类型 *</Label>
+<div className="flex flex-wrap gap-2">
+{craftTypeOptions.slice(0, 6).map((craft) => ( <Badge
+key={craft}
+variant={conceptForm.craftType === craft ? "default" : "outline"}
+className="cursor-pointer hover:bg-blue-100"
+onClick={() => setConceptForm({ ...conceptForm, craftType: craft })}
+>
+{craft}
+</Badge> ))}
+</div>
+<Input
+
+
+placeholder="或输入其他工艺类型"
+value={conceptForm.craftType}
+onChange={(e) => setConceptForm({ ...conceptForm, craftType: e.target.value })}
+className="mt-2"/> </div>
+<div className="space-y-2">
+<Label>目标市场</Label>
+<div className="flex flex-wrap gap-2">
+{targetMarketOptions.slice(0, 4).map((market) => ( <Badge
+key={market}
+variant={conceptForm.targetMarket === market ? "default" : "outline"}
+className="cursor-pointer hover:bg-blue-100 text-xs"
+onClick={() => setConceptForm({ ...conceptForm, targetMarket: market })}>
+{market}
+</Badge> ))}
+</div>
+<Input
+placeholder="或输入其他目标市场" value={conceptForm.targetMarket}
+onChange={(e) => setConceptForm({ ...conceptForm, targetMarket: e.target.value })}
+className="mt-2"/> </div>
+<Button
+onClick={handleConceptGenerate}
+disabled={isLoading}
+
+
+className="w-full bg-brand hover:bg-brand-dark py-6" >
+{isLoading ? ( <>
+<Loader2 className="h-4 w-4 mr-2 animate-spin" />
+AI 正在分析生成...
+</>
+) : (
+<>
+<Sparkles className="h-4 w-4 mr-2" />
+生成设计理念</>
+)}
+</Button>
+</TabsContent>
+{/*  文化禁忌 */}
+<TabsContent value="culture" className="space-y-4">
+<div className="space-y-2">
+<Label htmlFor="cultureProductName">产品名称 *</Label> <Input
+id="cultureProductName"
+placeholder="例如：剪纸艺术品、年画"
+value={cultureForm.productName}
+onChange={(e) => setCultureForm({ ...cultureForm, productName: e.target.value })}/>
+</div>
+<div className="space-y-2">
+<Label>工艺类型</Label>
+<div className="flex flex-wrap gap-2">
+{craftTypeOptions.slice(0, 6).map((craft) => (
+
+
+<Badge
+key={craft}
+variant={cultureForm.craftType === craft ? "default" : "outline"} className="cursor-pointer hover:bg-blue-100"
+onClick={() => setCultureForm({ ...cultureForm, craftType: craft })}>
+{craft}
+</Badge> ))}
+</div>
+</div>
+<div className="space-y-2">
+<Label htmlFor="targetCountry">目标国家/地区 *</Label> <Input
+id="targetCountry"
+placeholder="例如：美国、日本、沙特阿拉伯、法国"
+value={cultureForm.targetCountry}
+onChange={(e) => setCultureForm({ ...cultureForm, targetCountry: e.target.value })}/>
+</div>
+<div className="flex items-start gap-2 bg-amber-50 p-3 rounded-lg border border-amber-200">
+<AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink- 0" />
+<p className="text-xs text-amber-700">
+重要：文化禁忌检测可帮助您避免产品在目标市场引发文化冲突，建议在产品定型前进行检测。
+</p>
+</div>
+<Button
+onClick={handleCultureCheck}
+
+
+disabled={isLoading}
+className="w-full bg-brand hover:bg-brand-dark py-6" >
+{isLoading ? ( <>
+<Loader2 className="h-4 w-4 mr-2 animate-spin" /> AI 正在检测分析...
+</>
+) : (
+<>
+<Sparkles className="h-4 w-4 mr-2" />
+开始文化检测</>
+)}
+</Button>
+</TabsContent>
+</Tabs>
+</CardContent>
+</Card>
+{/* Right: Result Display */}
+<Card className="shadow-xl border-slate-200">
+<CardHeader className="bg-brand/10 rounded-t-lg">
+<CardTitle className="flex items-center">
+<Globe className="h-5 w-5 mr-2 text-blue-600" />
+生成结果
+</CardTitle>
+<CardDescription>
+AI 生成的内容将在这里展示</CardDescription>
+
+
+</CardHeader>
+<CardContent className="pt-6"> {!result ? (
+<div className="flex flex-col items-center justify-center py-16 text-slate- 400">
+<div className="bg-brand/20 p-6 rounded-full mb-4"> <Palette className="h-12 w-12 text-blue-400" />
+</div>
+<p className="text-lg font-medium text-slate-500 mb-2">等待生成</p> <p className="text-sm text-center max-w-xs">
+填写左侧表单，选择功能类型，开始您的 AI 设计之旅</p>
+</div>
+) : (
+<div className="space-y-4"> {/*  图片结果 */}
+{result.images && (
+<div>
+<h3 className="font-semibold mb-3 flex items-center gap-2"> <CheckCircle2 className="h-4 w-4 text-green-600" />
+生成的图片
+</h3>
+<div className="grid grid-cols-2 gap-3">
+{result.images.map((url: string, index: number) => (
+<div key={index} className="relative group"> <img
+src={url}
+alt={`设计图 ${index + 1}`}
+className="w-full h-40 object-cover rounded-lg border border-slate-200"/>
+
+
+<div className="absolute inset-0 bg-black/50 opacity-0
+group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-2">
+<Button size="sm" variant="secondary" className="bg- white">
+<Download className="h-4 w-4 mr-1" />
+下载
+</Button>
+</div>
+</div>
+))}
+</div>
+</div>
+)}
+{/*  文本结果 */}
+{result.content && ( <div>
+<div className="flex items-center justify-between mb-2"> <h3 className="font-semibold flex items-center gap-2"> <CheckCircle2 className="h-4 w-4 text-green-600" />
+AI  建议</h3>
+<Button
+size="sm"
+variant="outline"
+onClick={() => copyToClipboard(result.content)}>
+<Copy className="h-4 w-4 mr-1" />
+复制
+</Button>
+</div>
+<div className="bg-brand/10 rounded-lg p-4 text-sm leading-relaxed whitespace-pre-wrap max-h-[500px] overflow-y-auto border border-brand/20">
+
+
+{result.content} </div>
+</div>
+)}
+{/*  禁忌列表 */}
+{result.taboos && ( <div>
+<h3 className="font-semibold mb-3 text-amber-600 flex items-center gap-2">
+<AlertTriangle className="h-4 w-4" />
+文化禁忌提醒</h3>
+<ul className="space-y-2">
+{result.taboos.map((taboo: string, index: number) => (
+<li key={index} className="flex items-start gap-2 text-sm bg- amber-50 p-3 rounded-lg border border-amber-100">
+<AlertTriangle className="h-4 w-4 text-amber-600 flex- shrink-0 mt-0.5" />
+<span>{taboo}</span> </li>
+))}
+</ul>
+</div>
+)}
+</div>
+)}
+</CardContent>
+</Card>
+</div>
+</div>
+</div>
+
+
+);
+}
+跨境全案出海策略生成页面-page.tsx
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {TrendingUp, DollarSign,FileText,
+Globe,AlertTriangle,Sparkles,Loader2,Copy,Download,BarChart3 } from 'lucide-react'; export default function StrategyPage() {
+const [activeTab, setActiveTab] = useState('pricing');
+const [isLoading, setIsLoading] = useState(false);
+const [result, setResult] = useState<any>(null); //  价格分析
+const [pricingForm, setPricingForm] = useState({ productName: '',
+craftType: '',
+targetMarket: '',
+costPrice: '', });
+//  政策分析
+const [policyForm, setPolicyForm] = useState({ productName: '',
+craftType: '',
+targetCountry: '', exportType: '',
+
+
+});
+//  市场预测
+const [marketForm, setMarketForm] = useState({ productName: '',
+craftType: '',
+targetMarkets: '', });
+//  风险应对
+const [riskForm, setRiskForm] = useState({ productName: '',
+craftType: '',
+targetMarkets: '',
+concerns: '', });
+const handlePricingAnalysis = async () => {
+if (!pricingForm.productName || !pricingForm.targetMarket) { alert('请填写产品名称和目标市场');
+return;
+}
+setIsLoading(true); try {
+const response = await fetch('/api/strategy/pricing', { method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(pricingForm), });
+const data = await response.json();
+if (response.ok) { setResult(data);
+
+
+} else {
+alert(data.error || '分析失败');
+}
+} catch (error) {
+console.error('分析错误:', error);
+alert('分析失败，请稍后重试'); } finally {
+setIsLoading(false); }
+};
+const handlePolicyAnalysis = async () => {
+if (!policyForm.productName || !policyForm.targetCountry) { alert('请填写产品名称和目标国家');
+return;
+}
+setIsLoading(true); try {
+const response = await fetch('/api/strategy/policy', { method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(policyForm), });
+const data = await response.json();
+if (response.ok) { setResult(data);
+} else {
+alert(data.error || '分析失败');
+}
+} catch (error) {
+
+
+console.error('分析错误:', error);
+alert('分析失败，请稍后重试'); } finally {
+setIsLoading(false); }
+};
+const handleMarketForecast = async () => {
+if (!marketForm.productName || !marketForm.targetMarkets) { alert('请填写产品名称和目标市场');
+return;
+}
+setIsLoading(true); try {
+const response = await fetch('/api/strategy/market', { method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(marketForm), });
+const data = await response.json();
+if (response.ok) { setResult(data);
+} else {
+alert(data.error || '分析失败');
+}
+} catch (error) {
+console.error('分析错误:', error);
+alert('分析失败，请稍后重试');
+} finally {
+setIsLoading(false);
+
+
+}
+};
+const handleRiskAnalysis = async () => {
+if (!riskForm.productName || !riskForm.targetMarkets) { alert('请填写产品名称和目标市场');
+return;
+}
+setIsLoading(true); try {
+const response = await fetch('/api/strategy/risk', { method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(riskForm), });
+const data = await response.json();
+if (response.ok) { setResult(data);
+} else {
+alert(data.error || '分析失败');
+}
+} catch (error) {
+console.error('分析错误:', error);
+alert('分析失败，请稍后重试'); } finally {
+setIsLoading(false); }
+};
+const copyToClipboard = (text: string) => { navigator.clipboard.writeText(text);
+
+
+alert('已复制到剪贴板'); };
+return (
+<div className="min-h-screen bg-brand/5 py-8">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> {/* Header */}
+<div className="text-center mb-8">
+<h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">智能出海策略
+</h1>
+<p className="text-lg text-slate-600">
+从定价到风险应对，全方位的出海策略支持
+</p>
+</div>
+<div className="grid lg:grid-cols-2 gap-8"> {/* Left: Input Form */}
+<Card className="shadow-lg">
+<CardHeader>
+<CardTitle className="flex items-center">
+<TrendingUp className="h-5 w-5 mr-2 text-blue-600" />策略工具
+</CardTitle>
+<CardDescription>
+选择策略类型，填写相关信息开始分析</CardDescription>
+</CardHeader>
+<CardContent>
+<Tabs value={activeTab} onValueChange={setActiveTab}>
+<TabsList className="grid w-full grid-cols-4">
+
+
+<TabsTrigger value="pricing" className="text-xs sm:text-sm"> <DollarSign className="h-4 w-4 sm:mr-1" />
+<span className="hidden sm:inline">定价策略</span>
+</TabsTrigger>
+<TabsTrigger value="policy" className="text-xs sm:text-sm"> <FileText className="h-4 w-4 sm:mr-1" />
+<span className="hidden sm:inline">政策分析</span>
+</TabsTrigger>
+<TabsTrigger value="market" className="text-xs sm:text-sm"> <Globe className="h-4 w-4 sm:mr-1" />
+<span className="hidden sm:inline">市场预测</span>
+</TabsTrigger>
+<TabsTrigger value="risk" className="text-xs sm:text-sm"> <AlertTriangle className="h-4 w-4 sm:mr-1" />
+<span className="hidden sm:inline">风险应对</span>
+</TabsTrigger>
+</TabsList>
+{/*  定价策略 */}
+<TabsContent value="pricing" className="space-y-4 mt-4">
+<div className="space-y-2">
+<Label htmlFor="pricingProductName">产品名称 *</Label> <Input
+id="pricingProductName"
+placeholder="例如：苏绣真丝围巾"
+value={pricingForm.productName}
+onChange={(e) => setPricingForm({ ...pricingForm, productName: e.target.value })}
+/>
+</div>
+<div className="space-y-2">
+
+
+<Label htmlFor="pricingCraftType">工艺类型</Label>
+<Input
+id="pricingCraftType"
+placeholder="例如：刺绣、陶瓷"
+value={pricingForm.craftType}
+onChange={(e) => setPricingForm({ ...pricingForm, craftType: e.target.value })}/>
+</div>
+<div className="space-y-2">
+<Label htmlFor="pricingTargetMarket">目标市场 *</Label> <Input
+id="pricingTargetMarket"
+placeholder="例如：美国高端市场"
+value={pricingForm.targetMarket}
+onChange={(e) => setPricingForm({ ...pricingForm, targetMarket: e.target.value })}/>
+</div>
+<div className="space-y-2">
+<Label htmlFor="costPrice">成本价（元）</Label> <Input
+id="costPrice"
+type="number"
+placeholder="例如：500"
+value={pricingForm.costPrice}
+onChange={(e) => setPricingForm({ ...pricingForm, costPrice: e.target.value })}/>
+</div>
+<Button
+onClick={handlePricingAnalysis}
+disabled={isLoading}
+className="w-full bg-brand hover:bg-brand-dark">
+
+
+{isLoading ? ( <>
+<Loader2 className="h-4 w-4 mr-2 animate-spin" />分析中...
+</>
+) : (
+<>
+<Sparkles className="h-4 w-4 mr-2" />
+开始分析</>
+)}
+</Button>
+</TabsContent>
+{/*  政策分析 */}
+<TabsContent value="policy" className="space-y-4 mt-4">
+<div className="space-y-2">
+<Label htmlFor="policyProductName">产品名称 *</Label> <Input
+id="policyProductName"
+placeholder="例如：景德镇瓷器"
+value={policyForm.productName}
+onChange={(e) => setPolicyForm({ ...policyForm, productName: e.target.value })}/>
+</div>
+<div className="space-y-2">
+<Label htmlFor="policyCraftType">工艺类型</Label> <Input
+id="policyCraftType"
+placeholder="例如：陶瓷"
+value={policyForm.craftType}
+
+
+onChange={(e) => setPolicyForm({ ...policyForm, craftType:
+e.target.value })}/>
+</div>
+<div className="space-y-2">
+<Label htmlFor="policyTargetCountry">目标国家 *</Label> <Input
+id="policyTargetCountry"
+placeholder="例如：美国、日本、欧盟"
+value={policyForm.targetCountry}
+onChange={(e) => setPolicyForm({ ...policyForm, targetCountry: e.target.value })}/>
+</div>
+<div className="space-y-2">
+<Label htmlFor="exportType">出口类型</Label> <Input
+id="exportType"
+placeholder="例如：B2B 批发、B2C 零售"
+value={policyForm.exportType}
+onChange={(e) => setPolicyForm({ ...policyForm, exportType: e.target.value })}/>
+</div>
+<Button
+onClick={handlePolicyAnalysis}
+disabled={isLoading}
+className="w-full bg-brand hover:bg-brand-dark" >
+{isLoading ? ( <>
+<Loader2 className="h-4 w-4 mr-2 animate-spin" />分析中...
+</>
+
+
+) : (
+<>
+<Sparkles className="h-4 w-4 mr-2" />
+开始分析</>
+)}
+</Button>
+</TabsContent>
+{/*  市场预测 */}
+<TabsContent value="market" className="space-y-4 mt-4">
+<div className="space-y-2">
+<Label htmlFor="marketProductName">产品名称 *</Label> <Input
+id="marketProductName"
+placeholder="例如：景泰蓝工艺品"
+value={marketForm.productName}
+onChange={(e) => setMarketForm({ ...marketForm, productName: e.target.value })}/>
+</div>
+<div className="space-y-2">
+<Label htmlFor="marketCraftType">工艺类型</Label> <Input
+id="marketCraftType"
+placeholder="例如：景泰蓝"
+value={marketForm.craftType}
+onChange={(e) => setMarketForm({ ...marketForm, craftType: e.target.value })}/>
+</div>
+<div className="space-y-2">
+<Label htmlFor="targetMarkets">目标市场 *</Label>
+
+
+<Textarea
+id="targetMarkets"
+placeholder="列出目标市场，用逗号分隔，例如：美国、日本、欧洲"
+rows={2}
+value={marketForm.targetMarkets}
+onChange={(e) => setMarketForm({ ...marketForm, targetMarkets: e.target.value })}/>
+</div>
+<Button
+onClick={handleMarketForecast}
+disabled={isLoading}
+className="w-full bg-brand hover:bg-brand-dark">
+{isLoading ? ( <>
+<Loader2 className="h-4 w-4 mr-2 animate-spin" />
+预测中...
+</>
+) : (
+<>
+<Sparkles className="h-4 w-4 mr-2" />
+开始预测</>
+)}
+</Button>
+</TabsContent>
+{/*  风险应对 */}
+<TabsContent value="risk" className="space-y-4 mt-4"> <div className="space-y-2">
+<Label htmlFor="riskProductName">产品名称 *</Label>
+
+
+<Input
+id="riskProductName"
+placeholder="例如：中国结工艺品"
+value={riskForm.productName}
+onChange={(e) => setRiskForm({ ...riskForm, productName: e.target.value })}/>
+</div>
+<div className="space-y-2">
+<Label htmlFor="riskCraftType">工艺类型</Label> <Input
+id="riskCraftType"
+placeholder="例如：编织"
+value={riskForm.craftType}
+onChange={(e) => setRiskForm({ ...riskForm, craftType: e.target.value })}/>
+</div>
+<div className="space-y-2">
+<Label htmlFor="riskTargetMarkets">目标市场 *</Label> <Input
+id="riskTargetMarkets"
+placeholder="例如：东南亚、中东"
+value={riskForm.targetMarkets}
+onChange={(e) => setRiskForm({ ...riskForm, targetMarkets: e.target.value })}/>
+</div>
+<div className="space-y-2">
+<Label htmlFor="concerns">担忧的问题</Label> <Textarea
+id="concerns"
+placeholder="描述您担心的问题，例如：汇率波动、物流成本、知识产权保护等"
+
+
+rows={3}
+value={riskForm.concerns}
+onChange={(e) => setRiskForm({ ...riskForm, concerns: e.target.value })}/>
+</div>
+<Button
+onClick={handleRiskAnalysis}
+disabled={isLoading}
+className="w-full bg-brand hover:bg-brand-dark"> {isLoading ? (
+<>
+<Loader2 className="h-4 w-4 mr-2 animate-spin" />分析中...
+</>
+) : (
+<>
+<Sparkles className="h-4 w-4 mr-2" />
+开始分析</>
+)}
+</Button>
+</TabsContent>
+</Tabs>
+</CardContent>
+</Card>
+{/* Right: Result Display */}
+<Card className="shadow-lg">
+<CardHeader>
+<CardTitle className="flex items-center">
+<BarChart3 className="h-5 w-5 mr-2 text-blue-600" />
+
+
+分析结果
+</CardTitle>
+<CardDescription>
+AI 生成的策略建议将在这里展示
+</CardDescription>
+</CardHeader>
+<CardContent>
+{!result ? (
+<div className="flex flex-col items-center justify-center py-16 text-slate- 400">
+<TrendingUp className="h-16 w-16 mb-4" />
+<p>填写左侧表单开始分析</p> </div>
+) : (
+<div className="space-y-4"> <div>
+<div className="flex items-center justify-between mb-2"> <h3 className="font-semibold">AI  策略建议</h3>
+<div className="flex gap-2">
+<Button
+size="sm"
+variant="ghost"
+onClick={() => copyToClipboard(result.content)}>
+<Copy className="h-4 w-4 mr-1" />
+复制
+</Button>
+<Button size="sm" variant="ghost">
+<Download className="h-4 w-4 mr-1" />导出
+</Button>
+
+
+</div>
+</div>
+<div className="bg-slate-50 rounded-lg p-4 text-sm leading-relaxed whitespace-pre-wrap max-h-[600px] overflow-y-auto">
+{result.content} </div>
+</div>
+{result.recommendations && (
+<div>
+<h3 className="font-semibold mb-3">关键建议</h3> <ul className="space-y-2">
+{result.recommendations.map((rec: string, index: number) => (
+<li key={index} className="flex items-start gap-2 text-sm bg- blue-50 p-2 rounded">
+<span className="font-semibold text-blue-600">{index + 1}.</span>
+<span>{rec}</span> </li>
+))}
+</ul>
+</div>
+)}
+</div>
+)}
+</CardContent>
+</Card>
+</div>
+</div>
+</div>
+);
+}
